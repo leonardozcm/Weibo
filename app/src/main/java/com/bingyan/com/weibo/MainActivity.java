@@ -1,15 +1,21 @@
 package com.bingyan.com.weibo;
 
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.MenuItem;
 import android.widget.TextView;
+
+import com.bingyan.com.weibo.login.mvp.View.LoginActivity;
 
 public class MainActivity extends AppCompatActivity {
 
     private TextView mTextMessage;
+    private SharedPreferences mSharedPreferences;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -35,12 +41,25 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        Log.d("MainActivity", "onCreate: null");
+        if(isSharePreferencesNull(getSharedPreferences("accessTokenBeam",MODE_PRIVATE))){
+            Intent intent=new Intent(MainActivity.this, LoginActivity.class);
+            startActivity(intent);
+            finish();
+        }
 
         mTextMessage = findViewById(R.id.message);
-        BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
+        BottomNavigationView navigation = findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
-
-
     }
 
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        setIntent(intent);
+    }
+
+    public boolean isSharePreferencesNull(SharedPreferences sharedPreferences){
+        return (sharedPreferences.getString("access_token",null)==null);
+    }
 }

@@ -47,12 +47,14 @@ public class HttpUtils {
      * @param <T>
      */
     public interface HttpCallBack<T>{
-       default T onRequestComplete(@NonNull String result, Gson gson){
+       default T onParseJson(@NonNull String result, Gson gson){
            JsonParser jsonParser = new JsonParser();
            JsonElement jsonElement = jsonParser.parse(result);
            Type type=((ParameterizedType)getClass().getGenericSuperclass()).getActualTypeArguments()[0];
            return gson.fromJson(jsonElement,type);
        }
+
+       void onRequestComplete(@NonNull String result, Gson gson);
 
     }
 

@@ -6,9 +6,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 
-import com.bingyan.com.weibo.MainActivity;
 import com.bingyan.com.weibo.R;
 import com.bingyan.com.weibo.login.mvp.LoginTaskOfVP;
+import com.bingyan.com.weibo.login.mvp.Model.AccessTokenBeam;
 import com.bingyan.com.weibo.login.mvp.Presenter.LoginInPresenter;
 
 public class LoginActivity extends AppCompatActivity implements LoginTaskOfVP.LoginView{
@@ -38,7 +38,7 @@ public class LoginActivity extends AppCompatActivity implements LoginTaskOfVP.Lo
     }
 
     @Override
-    public void OnSuccess() {
+    public void OnSuccess(AccessTokenBeam accessTokenBeam) {
 
     }
 

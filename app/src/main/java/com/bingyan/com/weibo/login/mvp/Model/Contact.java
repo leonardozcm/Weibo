@@ -33,7 +33,7 @@ public class Contact {
 
     private Contact(){
     }
-    public Contact getInstance(){
+    public static Contact getInstance(){
         return new Contact();
     }
 
@@ -50,4 +50,6 @@ public class Contact {
         map.put("redirect_uri",redirect_uri);
         return map;
     }
+
+
 }
