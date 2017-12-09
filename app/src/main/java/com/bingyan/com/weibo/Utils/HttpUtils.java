@@ -101,6 +101,8 @@ public class HttpUtils {
         return builder.build();
     }
 
+
+
     public void postAsyn(final String url,HashMap<String,String> params,@NonNull final HttpCallBack callBack){
         try{
             Request mRequest=buildPostReqWithAllParams(url,params);
