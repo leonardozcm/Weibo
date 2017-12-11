@@ -47,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
             startActivity(intent);
             finish();
         }
-
+        Log.d("AccessToken", "onCreate: "+mSharedPreferences);
         mTextMessage = findViewById(R.id.message);
         BottomNavigationView navigation = findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
@@ -60,6 +60,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public boolean isSharePreferencesNull(SharedPreferences sharedPreferences){
+        mSharedPreferences=sharedPreferences;
+        Log.d("accessToken", "isSharePreferencesNull: "+sharedPreferences.getString("access_token",null));
         return (sharedPreferences.getString("access_token",null)==null);
     }
 }

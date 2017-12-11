@@ -14,7 +14,7 @@ import com.google.gson.Gson;
  * 这个present同时给LoginActivity与LoginInActivity的接口使用
  */
 
-public class LoginInPresenter implements LoginTaskOfVP.LoginPresenter,HttpUtils.HttpCallBack<AccessTokenBeam>{
+public class LoginInPresenter implements HttpUtils.HttpCallBack<AccessTokenBeam>,LoginTaskOfVP.LoginPresenter{
    private LoginTaskOfVP.LoginView mLoginView;
    private Contact contact;
    private HttpUtils mHttpUtils;

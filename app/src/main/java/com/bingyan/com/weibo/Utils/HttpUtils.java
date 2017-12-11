@@ -28,17 +28,17 @@ import static android.content.ContentValues.TAG;
 
 public class HttpUtils {
 
-    private static HttpUtils mHttpUtils=new HttpUtils();
+    private static HttpUtils mHttpUtils = new HttpUtils();
 
     private OkHttpClient mClient;
 
-    private Gson gson=new Gson();
+    private Gson gson = new Gson();
 
-    private HttpUtils(){
-        mClient=new OkHttpClient();
+    private HttpUtils() {
+        mClient = new OkHttpClient();
     }
 
-    public static HttpUtils getInstance(){
+    public static HttpUtils getInstance() {
         return mHttpUtils;
     }
 
@@ -46,27 +46,28 @@ public class HttpUtils {
      * 用于提供给Present层回调
      * @param <T>
      */
-    public interface HttpCallBack<T>{
-       default T onParseJson(@NonNull String result, Gson gson){
-           JsonParser jsonParser = new JsonParser();
-           JsonElement jsonElement = jsonParser.parse(result);
-           Type type=((ParameterizedType)getClass().getGenericSuperclass()).getActualTypeArguments()[0];
-           return gson.fromJson(jsonElement,type);
-       }
+    public interface HttpCallBack<T> {
+        default T onParseJson(@NonNull String result, Gson gson) {
+            JsonParser jsonParser = new JsonParser();
+            JsonElement jsonElement = jsonParser.parse(result);
+            Type type = ((ParameterizedType) getClass().getGenericInterfaces()[0]).getActualTypeArguments()[0];
+            return gson.fromJson(jsonElement,type);
+        }
 
-       void onRequestComplete(@NonNull String result, Gson gson);
+        void onRequestComplete(@NonNull String result, Gson gson);
 
     }
 
     /**
      * 用异步的方法拿到数据
-     * @param url 服务器地址
-     * @param params GET请求的参数
+     *
+     * @param url      服务器地址
+     * @param params   GET请求的参数
      * @param callBack 获取成功后回调的接口
      */
-    public void getAsyn(final String url,HashMap<String,String> params,@NonNull final HttpCallBack callBack){
-        try{
-            Request mRequest=buildGetReqWithAllParams(url,params);
+    public void getAsyn(final String url, HashMap<String, String> params, @NonNull final HttpCallBack callBack) {
+        try {
+            Request mRequest = buildGetReqWithAllParams(url, params);
             mClient.newCall(mRequest).enqueue(new Callback() {
                 @Override
                 public void onFailure(@NonNull Call call, @NonNull IOException e) {
@@ -76,15 +77,15 @@ public class HttpUtils {
                 }
 
                 @Override
-                public void onResponse(@NonNull Call call,@NonNull Response response) throws IOException {
-                    if(response.isSuccessful()){
-                        callBack.onRequestComplete(response.body().string(),gson);
+                public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
+                    if (response.isSuccessful()) {
+                        callBack.onRequestComplete(response.body().string(), gson);
                     }
                 }
             });
 
 
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -93,42 +94,42 @@ public class HttpUtils {
      * @param map 请求的参数
      * @return 一个完整的请求头
      */
-    private Request buildGetReqWithAllParams(String url,HashMap<String,String> map){
-       Request.Builder builder=new Request.Builder().url(url);
-        for (Map.Entry<String,String> entry:map.entrySet()){
-            builder.addHeader(entry.getKey(),entry.getValue());
+    private Request buildGetReqWithAllParams(String url, HashMap<String, String> map) {
+        Request.Builder builder = new Request.Builder().url(url);
+        for (Map.Entry<String, String> entry : map.entrySet()) {
+            builder.addHeader(entry.getKey(), entry.getValue());
         }
         return builder.build();
     }
 
 
-
-    public void postAsyn(final String url,HashMap<String,String> params,@NonNull final HttpCallBack callBack){
-        try{
-            Request mRequest=buildPostReqWithAllParams(url,params);
+    public void postAsyn(final String url, HashMap<String, String> params, @NonNull final HttpCallBack callBack) {
+        try {
+            Request mRequest = buildPostReqWithAllParams(url, params);
             mClient.newCall(mRequest).enqueue(new Callback() {
                 @Override
-                public void onFailure(@NonNull Call call,@NonNull IOException e) {
+                public void onFailure(@NonNull Call call, @NonNull IOException e) {
                     call.cancel();
                     Log.d(TAG, "onFailure: http POST请求失败");
                     e.printStackTrace();
                 }
 
                 @Override
-                public void onResponse(@NonNull Call call,@NonNull Response response) throws IOException {
-                    if(response.isSuccessful()){
-                        callBack.onRequestComplete(response.body().string(),gson);
+                public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
+                    if (response.isSuccessful()) {
+                        callBack.onRequestComplete(response.body().string(), gson);
                     }
                 }
             });
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
-    private Request buildPostReqWithAllParams(String url,HashMap<String,String> map){
-        FormBody.Builder builder=new FormBody.Builder();
-        for (Map.Entry<String,String> entry:map.entrySet()) {
-            builder.add(entry.getKey(),entry.getValue());
+
+    private Request buildPostReqWithAllParams(String url, HashMap<String, String> map) {
+        FormBody.Builder builder = new FormBody.Builder();
+        for (Map.Entry<String, String> entry : map.entrySet()) {
+            builder.add(entry.getKey(), entry.getValue());
         }
         return new Request.Builder()
                 .url(url)
